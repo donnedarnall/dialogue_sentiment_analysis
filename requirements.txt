@@ -1,0 +1,9 @@
+# This file lists dependencies for a Flask application: Flask for web development, 
+# Flask-WTF for forms, requests for HTTP, and openai for OpenAI API access.
+
+Flask>=2.0
+Werkzeug==2.0
+Jinja2>=3.0
+Flask-WTF>=0.15
+requests==2.25.1
+openai>=0.10.2

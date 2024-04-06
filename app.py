@@ -1,0 +1,46 @@
+# This Flask app enables users to upload audio files, which it then transcribes and analyzes for sentiment, 
+# displaying the sentiment analysis results on the web interface.
+
+from flask import Flask, render_template, request
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired
+from wtforms import SubmitField
+import os 
+from sentiment_analysis import analyze_audio
+from audio_transcription import transcribe_audio
+
+app = Flask(__name__)
+
+# Set the Flask secret key and upload folder
+app.config['SECRET_KEY'] = 'f9bd6e772acc427f555546efb424054a'
+app.config['UPLOAD_FOLDER'] = 'upload_folder'  
+
+
+class AudioForm(FlaskForm):
+    audio_file = FileField('Audio File', validators=[FileRequired()])
+    submit = SubmitField('Upload')
+
+@app.route('/', methods=['GET', 'POST'])
+
+def upload_audio():
+    
+    form = AudioForm()
+    if form.validate_on_submit():
+        audio_file = form.audio_file.data
+        filename = os.path.join(app.config['UPLOAD_FOLDER'], 'audio_file')
+
+        # Save the uploaded file to the server
+        audio_file.save(filename)  
+
+        # Transcribe the audio file then analyze for sentiment analysis
+        transcript = transcribe_audio(filename)
+        audio_analysis = analyze_audio(transcript)
+
+        return render_template('result.html', text_output=audio_analysis)
+    return render_template('upload.html', form=form)
+
+
+if __name__ == '__main__':
+    port = int(os.getenv("PORT", 8080))
+    app.run(debug=False, host='0.0.0.0', port=port)
+    #app.run(debug=False, host='0.0.0.0', port=5001)

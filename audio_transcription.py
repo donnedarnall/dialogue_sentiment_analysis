@@ -1,0 +1,56 @@
+# Automates audio transcription and speaker diarization using the Deepgram API,
+# identifying and labeling different speakers in the transcription.
+
+import requests
+import os
+from sentiment_analysis import analyze_audio
+
+# Retrieve the Deepgram API key and set up the request headers for audio transcription.
+api_key = os.getenv("DG_API_KEY")
+headers = {
+    'Authorization': f'Token {api_key}',
+    'Content-Type': 'audio/mp3'
+}
+
+# Enable diarization
+params = {
+    'diarize': 'true',
+    'diarize_version': 'latest',
+}
+
+def transcribe_audio(audio_file_path):
+    with open(audio_file_path, 'rb') as audio_file:
+        response = requests.post('https://api.deepgram.com/v1/listen', headers=headers, params=params, data=audio_file)
+
+    transcript_lines = []
+
+    # Check response
+    if response.status_code == 200:
+        data = response.json()
+
+        current_speaker = None
+        
+
+        # Iterate through each word in the data
+        for word in data['results']['channels'][0]['alternatives'][0]['words']:
+            speaker_id = word['speaker']
+            if speaker_id != current_speaker:
+                # New speaker detected, switch speaker
+                current_speaker = speaker_id
+                transcript_lines.append((f"[Speaker_{speaker_id + 1}]", [word['word']]))
+            else:
+                # Same speaker as previous word, append word to the current line
+                transcript_lines[-1][1].append(word['word'])
+
+        # Print formatted transcript maintaining conversation order
+        '''
+        print("Transcription: \n")
+        for speaker, words in transcript_lines:
+            print(f"{speaker}: {' '.join(words)}")
+        '''        
+ 
+    else:
+        print("Error in transcription")
+        print(response.text)
+
+    return transcript_lines
