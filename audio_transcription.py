@@ -4,6 +4,56 @@
 import requests
 import os
 from sentiment_analysis import analyze_audio
+'''
+import ssl
+#import requests
+from requests.adapters import HTTPAdapter
+from urllib3.poolmanager import PoolManager
+
+class SSLAdapter(HTTPAdapter):
+    def init_poolmanager(self, connections, maxsize, block=False):
+        self.poolmanager = PoolManager(num_pools=connections,
+                                       maxsize=maxsize,
+                                       block=block,
+                                       ssl_version=ssl.PROTOCOL_TLS)
+
+session = requests.Session()
+adapter = SSLAdapter()
+session.mount('https://', adapter)
+
+# Use session to make requests
+#response = session.get('https://api.deepgram.com')
+'''
+import ssl
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.poolmanager import PoolManager
+import certifi
+
+#response = requests.get('https://api.deepgram.com', verify=certifi.where())
+
+
+class SSLAdapter(HTTPAdapter):
+    def init_poolmanager(self, connections, maxsize, block=False, **pool_kwargs):
+        # Create an SSL context with your specifications
+        ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+        ssl_context.options &= ~ssl.OP_NO_SSLv3
+        ssl_context.verify_mode = ssl.CERT_REQUIRED
+        ssl_context.check_hostname = True
+        ssl_context.load_default_certs()
+
+        self.poolmanager = PoolManager(num_pools=connections,
+                                       maxsize=maxsize,
+                                       block=block,
+                                       ssl_context=ssl_context,
+                                       **pool_kwargs)
+
+session = requests.Session()
+adapter = SSLAdapter()
+session.mount('https://', adapter)
+
+# Now, use this session object to make your requests
+# For example:
+# response = session.get('https://api.deepgram.com/v1/listen', headers=headers, params=params, data=audio_file)
 
 # Retrieve the Deepgram API key and set up the request headers for audio transcription.
 api_key = os.getenv("DG_API_KEY")
@@ -21,6 +71,9 @@ params = {
 def transcribe_audio(audio_file_path):
     with open(audio_file_path, 'rb') as audio_file:
         response = requests.post('https://api.deepgram.com/v1/listen', headers=headers, params=params, data=audio_file)
+        #response = requests.post('https://api.deepgram.com/v1/listen', headers=headers, params=params, data=audio_file, verify=False)
+        #with requests.Session() as session:
+         #   response = session.get('https://api.deepgram.com/v1/listen', headers=headers, params=params, data=audio_file, verify=certifi.where())
 
     transcript_lines = []
 
@@ -43,11 +96,12 @@ def transcribe_audio(audio_file_path):
                 transcript_lines[-1][1].append(word['word'])
 
         # Print formatted transcript maintaining conversation order
-        '''
+    
         print("Transcription: \n")
         for speaker, words in transcript_lines:
             print(f"{speaker}: {' '.join(words)}")
-        '''        
+
+               
  
     else:
         print("Error in transcription")

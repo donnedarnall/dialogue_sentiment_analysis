@@ -1,12 +1,12 @@
 # Analyzes interview transcripts for sentiment and psychological insights using OpenAI's GPT-3.5-turbo model, 
 # focusing on the emotional state and motivations of each speaker without summarizing the content.
 
-#from openai import OpenAI
+from openai import OpenAI # type: ignore
 import openai
 import os
 
 # Retrieve OpenAI API key
-#client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 api_key = os.environ.get("OPENAI_API_KEY")
 
 def analyze_audio(transcript) :
@@ -15,7 +15,7 @@ def analyze_audio(transcript) :
 
     # Send request to OpenAI for sentiment and psychological analysis
     #response = client.chat.completions.create(
-    response = openai.chat.completions.create(
+    response = client.chat.completions.create(
         model=MODEL,
         messages=[
             {"role": "system", "content": "You are a helpful assistant who is focused on sentiment and psychological insights " + 

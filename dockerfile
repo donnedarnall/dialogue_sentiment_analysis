@@ -13,15 +13,17 @@ COPY . /dialogue_sentiment_analysis
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Make port 5000 available to the world outside this container
-#EXPOSE 8080
+EXPOSE 8080
 
 # Define environment variables for Flask to run
 ENV FLASK_APP app.py
 ENV FLASK_RUN_HOST 0.0.0.0
-#ENV FLASK_RUN_PORT 8080
+ENV FLASK_RUN_PORT 8080
+
+ENV DEEPGRAM_RUN_PORT 443
 # Ensure you replace 'your_secret_key_here' with your actual Flask secret key
-#ENV SECRET_KEY your_secret_key_here
-#ENV UPLOAD_FOLDER upload_folder
+ENV SECRET_KEY your_secret_key_here
+ENV UPLOAD_FOLDER upload_folder
 
 #ENTRYPOINT ["python3"]
 

@@ -31,3 +31,7 @@ Through the web interface, upload an audio file to receive sentiment analysis an
 ## Contact
 - **Email**: donnedarnall@gmail.com
 - **Project Link**: [https://github.com/donnedarnall/dialogue_sentiment_analysis](https://github.com/donnedarnall/dialogue_sentiment_analysis)
+
+## Run it locally
+
+docker run -d -p 80:8080 -e OPENAI_API_KEY=<Your api key> test
