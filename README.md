@@ -34,4 +34,4 @@ Through the web interface, upload an audio file to receive sentiment analysis an
 
 ## Run it locally
 
-docker run -d -p 80:8080 -e OPENAI_API_KEY=<Your api key> test
+docker run -d -p 80:8080 -e OPENAI_API_KEY=<Your api key> DG_API_KEY=<DG_API_KEY> test
