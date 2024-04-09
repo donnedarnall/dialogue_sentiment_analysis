@@ -36,14 +36,6 @@ def analyze_audio(transcript) :
     '''
     return response.choices[0].message.content
 
-
-
-
-
-
-
-
-
 '''
 # Request sentiment analysis from OpenAI's GPT model
 response = openai.Completion.create(
