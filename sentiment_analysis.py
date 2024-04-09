@@ -14,7 +14,7 @@ def analyze_audio(transcript) :
     transcript_string = ''.join([str(item) for item in transcript])
 
     # Send request to OpenAI for sentiment and psychological analysis
-    #response = client.chat.completions.create(
+
     response = client.chat.completions.create(
         model=MODEL,
         messages=[
@@ -30,25 +30,9 @@ def analyze_audio(transcript) :
     )
 
     #Print sentiment analysis
-    '''
-    print("\n\nAnalysis: \n")
-    print(response.choices[0].message.content)
-    '''
+    #print("\n\nAnalysis: \n")
+    #print(response.choices[0].message.content)
+    
     return response.choices[0].message.content
 
-'''
-# Request sentiment analysis from OpenAI's GPT model
-response = openai.Completion.create(
-    engine="text-davinci-002",
-    prompt=transcript,
-    max_tokens=50,
-    temperature=0.5,
-    stop=["\n"]
-)
 
-# Extract sentiment analysis result from the response
-sentiment_text = response.choices[0].text.strip()
-
-# Print sentiment analysis result
-print(sentiment_text)
-'''

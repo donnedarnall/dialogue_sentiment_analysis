@@ -32,7 +32,7 @@ Through the web interface, upload an audio file to receive sentiment analysis an
 - **Email**: donnedarnall@gmail.com
 - **Project Link**: [https://github.com/donnedarnall/dialogue_sentiment_analysis](https://github.com/donnedarnall/dialogue_sentiment_analysis)
 
-## Run it locally
+## Run Locally
 
 Create the docker image 
 
