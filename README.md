@@ -1,4 +1,4 @@
-# Alindor ML Engineer's Test Assignment
+# Dialogue Sentiment Analysis
 
 ## Overview
 A Flask-based application that leverages Deepgram for speech-to-text conversion and OpenAI for sentiment analysis, providing insights into dialogues. Hosted on the Google Cloud Platform, it's designed for scalability and insightful analysis of conversational sentiments.
